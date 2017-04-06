@@ -13,8 +13,9 @@ public class Utils : MonoBehaviour
 		x2 = n * 0.5f;
 		y = n;
 		i = *(long*)&y;
-		i = 0x5f3759df - (i >> 1);
+		i = 0x5f375a86 - (i >> 1);
 		y = *(float*)&i;
+		y = y * (1.5f - (x2 * y * y));
 		y = y * (1.5f - (x2 * y * y));
 
 		return y;
