@@ -44,7 +44,14 @@ public class IsMagnetic : MonoBehaviour
 				{
 					Vector2 direction = (ii.gameObject.transform.position - gameObject.transform.position).normalized;
 					float magnitude = power / (Mathf.Pow(Vector2.Distance(ii.gameObject.transform.position, gameObject.transform.position), 2));
-					toAffect.AddForce(magnitude * direction);
+					//float magnitude = power * Utils.Q_rsqrt(Vector2.Distance(ii.gameObject.transform.position, gameObject.transform.position)) / 10f;
+
+					// Create the force vector.
+					Vector2 forceVec = magnitude * direction;
+
+					// Skip this one if something goes horribly wrong. I'll figure out what the hell is happening later.
+					if (float.IsNaN(forceVec.x)) continue;
+					toAffect.AddForce(forceVec);
 				}
 			}
 		}
