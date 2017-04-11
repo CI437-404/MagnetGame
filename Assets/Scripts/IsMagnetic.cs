@@ -13,7 +13,7 @@ public class IsMagnetic : MonoBehaviour
 	static Dictionary<float, float> inverseSqrts = new Dictionary<float, float>();
 
 	// How many frames should we spread magnet updates across? I recommend 5 or 6 being the max.
-	static int updateFreq = 5;
+	static int updateFreq = 4;
 	// Based on the update frequency, we need to modify the force to achieve the same strength as updating every frame.
 	static float cyclePowerModifier = Mathf.Pow(1.3f, updateFreq - 1f);
 	// How far away should we care to update a magnet?
@@ -86,50 +86,50 @@ public class IsMagnetic : MonoBehaviour
 				if (toAffect != null && ii != this)
 				{
 					// Get the magnitude, with a bit of memoization fanciness.
-					float distance = Vector2.Distance(ii.gameObject.transform.position, gameObject.transform.position);
-					if (distance > maximumDistance) continue;
-					distance = Mathf.Round(distance * 10f) / 10f;	
-					
-					float magnitude = 0f;
-					if (!inverseSqrts.TryGetValue(distance, out magnitude))
-					{
-						inverseSqrts[distance] = magnitude = 1f / (Mathf.Pow(Vector2.Distance(ii.gameObject.transform.position, gameObject.transform.position), 2));
-						//Debug.Log("New Distance has been added to memo dict: " + distance);
-					}
-					float selfMagnitude = magnitude;
-
-					if (charge * ii.charge < 0)
-					{
-						magnitude *= -1f;
-						selfMagnitude *= 1f;
-					}
-					
-					
-					// Version without memoization.
-					//float magnitude = 1f / (Mathf.Pow(Vector2.Distance(ii.gameObject.transform.position, gameObject.transform.position), 2));
-
-					// Multiply by the power of this magnet, and the modifier based on the cycle count.
-					magnitude *= Mathf.Abs(charge) * cyclePowerModifier;
-					selfMagnitude *= Mathf.Abs(charge) * cyclePowerModifier;
+					float magnitude = GetMagnitude(ii.gameObject, gameObject);					
 
 					// Get the direction by normalizing the position vector between the two objects.
 					Vector3 direction = (ii.gameObject.transform.position - gameObject.transform.position).normalized;
+
+					// Flip based on charges.
+					if (ii.charge * charge <= 0)
+						direction *= -1f;
 
 					// Create the force vector.
 					Vector2 forceVec = magnitude * direction;
 
 					// Apply the force.
 					toAffect.AddForce(forceVec);
-					Debug.DrawLine(toAffect.transform.position, toAffect.transform.position + direction, Color.cyan, 0.1f);
+					//Debug.DrawLine(toAffect.transform.position, toAffect.transform.position + (direction * (0.1f * magnitude)), Color.cyan, 0.1f);
 
-					// Now we need to deal with self forces from this object.
+					// Apply self force if relevant.
 					if (rb != null)
 					{
-						rb.AddForce(-1f * selfMagnitude * direction);
-						Debug.DrawLine(transform.position, transform.position - direction, Color.yellow, 0.1f);
+						rb.AddForce(-1f * forceVec);
+						//Debug.DrawLine(toAffect.transform.position, toAffect.transform.position + (direction * (-0.1f * magnitude)), Color.yellow, 0.1f);
 					}
 				}
 			}
 		}
+	}
+
+	float GetMagnitude(GameObject a, GameObject b)
+	{
+		// Calculate and Round the distance
+		float distance = Vector2.Distance(a.transform.position, b.transform.position);
+		if (distance > maximumDistance) return 0;
+		distance = Mathf.Round(distance * 10f) / 10f;
+
+		// Use memoization to find the multiplier based on the distance.
+		float magnitude = 0f;
+		if (!inverseSqrts.TryGetValue(distance, out magnitude))
+		{
+			inverseSqrts[distance] = magnitude = 1f / (Mathf.Pow(Vector2.Distance(a.transform.position, b.transform.position), 2));
+			//Debug.Log("New Distance has been added to memo dict: " + distance);
+		}
+
+		// Multiply the charge and cycle modifier in to get the final magnitude.
+		magnitude *= Mathf.Abs(charge) * cyclePowerModifier;
+		return magnitude;
 	}
 }
