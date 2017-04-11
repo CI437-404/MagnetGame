@@ -21,7 +21,7 @@ public class IsMagnetic : MonoBehaviour
 
 	// Properties of this specific instance
 	// // Overall power of the magnetic force. +Push, -Pull.
-	public float power = 0f;
+	public float charge = 0f;
 	// // Current cycle this object is on. 
 	// // Objects update every updateFreq frames, this is where this object is on the cycle.
 	// // Random cycle position is decided in Start.
@@ -63,7 +63,7 @@ public class IsMagnetic : MonoBehaviour
 	void UpdateMagnet()
 	{
 		// Only bother updating if the magnetic force isn't 0.
-		if (power != 0f)
+		if (charge != 0f)
 		{
 			// Loop through every object.
 			foreach (IsMagnetic ii in magnets)
@@ -96,24 +96,38 @@ public class IsMagnetic : MonoBehaviour
 						inverseSqrts[distance] = magnitude = 1f / (Mathf.Pow(Vector2.Distance(ii.gameObject.transform.position, gameObject.transform.position), 2));
 						//Debug.Log("New Distance has been added to memo dict: " + distance);
 					}
+					float selfMagnitude = magnitude;
+
+					if (charge * ii.charge < 0)
+					{
+						magnitude *= -1f;
+						selfMagnitude *= 1f;
+					}
+					
 					
 					// Version without memoization.
 					//float magnitude = 1f / (Mathf.Pow(Vector2.Distance(ii.gameObject.transform.position, gameObject.transform.position), 2));
 
 					// Multiply by the power of this magnet, and the modifier based on the cycle count.
-					magnitude *= power * cyclePowerModifier;
+					magnitude *= Mathf.Abs(charge) * cyclePowerModifier;
+					selfMagnitude *= Mathf.Abs(charge) * cyclePowerModifier;
 
 					// Get the direction by normalizing the position vector between the two objects.
-					Vector2 direction = (ii.gameObject.transform.position - gameObject.transform.position).normalized;
+					Vector3 direction = (ii.gameObject.transform.position - gameObject.transform.position).normalized;
 
 					// Create the force vector.
 					Vector2 forceVec = magnitude * direction;
 
 					// Apply the force.
 					toAffect.AddForce(forceVec);
+					Debug.DrawLine(toAffect.transform.position, toAffect.transform.position + direction, Color.cyan, 0.1f);
 
 					// Now we need to deal with self forces from this object.
-					//rb.AddForce(-forceVec);
+					if (rb != null)
+					{
+						rb.AddForce(-1f * selfMagnitude * direction);
+						Debug.DrawLine(transform.position, transform.position - direction, Color.yellow, 0.1f);
+					}
 				}
 			}
 		}
