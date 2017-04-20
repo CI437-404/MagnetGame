@@ -31,6 +31,13 @@ public class IsMagnetic : MonoBehaviour
 	// // RigidBody. We need this reference so we can apply equal and opposite forces to this object as well as other objects.
 	Rigidbody2D rb;
 
+	// // SpriteRenderer, for setting tints.
+	SpriteRenderer sp;
+	bool setTint = true;
+	Color white = Color.white;
+	Color red = new Color(1.0f, 0.5f, 0.5f);
+	Color blue = new Color(0.5f, 0.5f, 1.0f);
+
 	void Start ()
 	{
 		// Add self to list of magnets immediately upon creation.
@@ -41,6 +48,9 @@ public class IsMagnetic : MonoBehaviour
 
 		// Get RigidBody reference.
 		rb = GetComponent<Rigidbody2D>();
+
+		// Get SpriteRenderer reference.
+		sp = GetComponent<SpriteRenderer>();
 	}
 
 	void OnDestroy()
@@ -58,6 +68,19 @@ public class IsMagnetic : MonoBehaviour
 			cycle = 1;
 		}
 		cycle++;
+	}
+
+	void FixedUpdate ()
+	{
+		if (setTint)
+		{
+			if (charge == 0)
+				sp.color = white;
+			else if (charge > 0)
+				sp.color = blue;
+			else if (charge < 0)
+				sp.color = red;
+		}
 	}
 
 	void UpdateMagnet()
