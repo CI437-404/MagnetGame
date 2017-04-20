@@ -72,7 +72,7 @@ public class Platformer : MonoBehaviour
 			if (Mathf.Abs(move) - 0.15F > 0)
 				move += (move > 0F ? -0.15F : 0.15F);
 			else
-				move = 0F;
+				move *= 0.9F;
 		}
 
 		// Check input for jump.
