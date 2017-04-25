@@ -2,6 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Still Need:
+// // Motor (Low Priority)
+// // Rotator (Low Priority)
+// // Elevator
+// // Conveyors
+// // 
+
 public class Triggerable : MonoBehaviour
 {
 	// This is just a weird way to generalize a component.
