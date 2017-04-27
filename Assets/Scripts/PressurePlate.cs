@@ -6,6 +6,7 @@ public class PressurePlate : MonoBehaviour
 {
 	public Sprite up;
 	public Sprite down;
+	int objects = 0;
 	SpriteRenderer sp;
 
 	public Triggerable[] toTrigger;
@@ -17,21 +18,29 @@ public class PressurePlate : MonoBehaviour
 
 	void OnTriggerEnter2D (Collider2D col)
 	{
+		objects++;
 		foreach (Triggerable ii in toTrigger)
 			ii.Trigger();
 	}
 	
 	void OnTriggerStay2D (Collider2D col)
 	{
-		sp.sprite = down;
-		foreach (Triggerable ii in toTrigger)
-			ii.Hold();
+		if (objects != 0)
+		{
+			sp.sprite = down;
+			foreach (Triggerable ii in toTrigger)
+				ii.Hold();
+		}
     }
 
 	void OnTriggerExit2D (Collider2D col)
 	{
-		sp.sprite = up;
-		foreach (Triggerable ii in toTrigger)
-			ii.UnTrigger();
+		objects--;
+		if (objects == 0)
+		{
+			sp.sprite = up;
+			foreach (Triggerable ii in toTrigger)
+				ii.UnTrigger();
+		}
     }
 }
