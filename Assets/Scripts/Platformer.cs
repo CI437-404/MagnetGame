@@ -16,6 +16,7 @@ public class Platformer : MonoBehaviour
 
 	// Internal Variables
 	Rigidbody2D rb;
+	Animator animator;
 	bool grounded = true;
 	bool jumping = false;
 	bool facingRight = true;
@@ -30,6 +31,7 @@ public class Platformer : MonoBehaviour
 	void Start ()
 	{
 		rb = GetComponent<Rigidbody2D>();
+		animator = this.GetComponent<Animator>();
 	}
 
 	// FixedUpdate is called 60 times per second.
@@ -56,16 +58,20 @@ public class Platformer : MonoBehaviour
 		if (Input.GetKey(keyRight) && Input.GetKey(keyLeft))
 		{
 			move = 0F;
+			//animator.SetInteger ("direction", 0);
 		}
 		else if (Input.GetKey(keyRight))
 		{
 			if (move < 0F) move = 0F;
 			if (move < 1F) move += 0.15F;
+			animator.SetInteger ("direction", 1);
 		}
 		else if (Input.GetKey(keyLeft))
 		{
 			if (move > 0F) move = 0F;
 			if (move > -1F) move -= 0.15F;
+			animator.SetInteger ("direction", 1);
+
 		}
 		else
 		{
@@ -73,6 +79,8 @@ public class Platformer : MonoBehaviour
 				move += (move > 0F ? -0.15F : 0.15F);
 			else
 				move *= 0.9F;
+			animator.SetInteger ("direction", 0);
+
 		}
 
 		// Check input for jump.
