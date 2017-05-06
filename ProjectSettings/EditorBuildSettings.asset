@@ -4,4 +4,37 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: 9499f674887a80545a008dd8e158d51d
+  - enabled: 1
+    path: Assets/Rooms/elevatorroom.unity
+    guid: 1d325eace78300c498267bead30cdce9
+  - enabled: 1
+    path: Assets/Rooms/FirstRoom.unity
+    guid: 79bf0f604ced0ab47bb5d8e8a1e413d8
+  - enabled: 1
+    path: Assets/Rooms/R1.unity
+    guid: 5162d2aeed9b21448925c4d43eeda35e
+  - enabled: 1
+    path: Assets/Rooms/R2.unity
+    guid: 4edbee1a51cc4034c90b8373f8f63fb3
+  - enabled: 1
+    path: Assets/Rooms/R3.unity
+    guid: 39284b03b20554c4cb01e8667bccaa0b
+  - enabled: 1
+    path: Assets/Rooms/R4.unity
+    guid: 6e78d4a1bcc77b344b61b8f2b833f25d
+  - enabled: 1
+    path: Assets/Rooms/R5.unity
+    guid: 35968918ee35d874699013980f8e2543
+  - enabled: 1
+    path: Assets/Rooms/R6.unity
+    guid: 6094ae51f7dd5c84ebb59e7fed07d751
+  - enabled: 1
+    path: Assets/Rooms/R7.unity
+    guid: 4e2024b4ce33321479b9fbd5e00f8c5f
+  - enabled: 1
+    path: Assets/Rooms/R8.unity
+    guid: c8ead1426a41a994293a40caebe4dfd6

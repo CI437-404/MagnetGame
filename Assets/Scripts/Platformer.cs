@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Platformer : MonoBehaviour
 {
@@ -54,6 +55,10 @@ public class Platformer : MonoBehaviour
 	// Useful for scanning input.
 	void Update ()
 	{
+		// Escape Input
+		if (Input.GetKeyDown(KeyCode.Escape))
+			SceneManager.LoadScene("Menu");
+
 		// Check inputs for left and right.
 		if (Input.GetKey(keyRight) && Input.GetKey(keyLeft))
 		{

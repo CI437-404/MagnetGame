@@ -13,7 +13,7 @@ public class IsMagnetic : MonoBehaviour
 	static Dictionary<float, float> inverseSqrts = new Dictionary<float, float>();
 
 	// How many frames should we spread magnet updates across? I recommend 5 or 6 being the max.
-	static int updateFreq = 4;
+	static int updateFreq = 1;	// 4 works well, but I think we can get away with 1.
 	// Based on the update frequency, we need to modify the force to achieve the same strength as updating every frame.
 	static float cyclePowerModifier = Mathf.Pow(1.3f, updateFreq - 1f);
 	// How far away should we care to update a magnet?
@@ -96,6 +96,10 @@ public class IsMagnetic : MonoBehaviour
 				foreach (IsMagnetic jj in blacklist)
 				{
 					if (jj == ii) skip = true;
+				}
+				if (ii.tag == "Player" && ii.charge == 0)
+				{
+					skip = true;
 				}
 				if (skip)
 				{
